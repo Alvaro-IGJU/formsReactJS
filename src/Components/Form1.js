@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Symbol from './symbol.js';
 
 const App = () => {
     const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ const App = () => {
         setFormData({ ...formData, input2: e.target.value });
         setValidationMessages((prevMessages) => ({
             ...prevMessages,
-            input2: isValid ? 'Email correcte' : 'Format d\'email incorrecte',
+            input2: isValid ? 'Email correcte ' : 'Format d\'email incorrecte',
         }));
         setAreCorrect((areCorrects) => ({
             ...areCorrects,
@@ -53,25 +54,26 @@ const App = () => {
     const handleCheckboxChange = (e) => {
         const isChecked = e.target.checked;
         const checkboxName = e.target.name;
-    
+
         setFormData((prevFormData) => ({
-          ...prevFormData,
-          [checkboxName]: isChecked,
+            ...prevFormData,
+            [checkboxName]: isChecked,
         }));
-    
+
         const selectedCheckboxes = Object.values(formData).filter((value) => value === true);
         const isValid = selectedCheckboxes.length === 2;
-    
+
         setValidationMessages((prevMessages) => ({
-          ...prevMessages,
-          checkbox: isValid ? 'Ha seleccionat 2 opcions correctament' : 'Ha de seleccionar 2 opcions',
+            ...prevMessages,
+            checkbox: isValid ? 'Ha seleccionat 2 opcions correctament' : 'Ha de seleccionar 2 opcions',
         }));
-    
+
         setAreCorrect((prevAreCorrects) => ({
-          ...prevAreCorrects,
-          checkbox: isValid,
+            ...prevAreCorrects,
+            checkbox: isValid,
         }));
-      };
+        
+    };
 
     const handleSelectChange = (e) => {
         const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
@@ -88,7 +90,6 @@ const App = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Aquí puedes realizar acciones adicionales o enviar el formulario si todas las validaciones son correctas
         console.log('Formulario enviado:', formData);
         console.log('Estados:', areCorrect);
     };
@@ -101,14 +102,15 @@ const App = () => {
                         Input 1:
                         <input
                             type="text"
-                            className={areCorrect.input1 ? "valid" : "invalid"}
+                            className={areCorrect.input1 !== '' ? (areCorrect.input1 ? 'valid' : 'invalid') : ''}
                             name="input1"
                             value={formData.input1}
                             onBlur={firstInput}
                             onChange={(e) => setFormData({ ...formData, input1: e.target.value })}
                             required
                         />
-                        <div>{validationMessages.input1}</div>
+                        <div>{validationMessages.input1}<Symbol areCorrect={areCorrect.input1}/>
+                        </div>
                     </label>
                 </div>
                 <div>
@@ -116,7 +118,7 @@ const App = () => {
                         Input 2:
                         <input
                             type="text"
-                            className={areCorrect.input2 ? "valid" : "invalid"}
+                            className={areCorrect.input2 !== '' ? (areCorrect.input2 ? 'valid' : 'invalid') : ''}
                             name="input2"
                             value={formData.input2}
                             onChange={emailInput}
@@ -125,7 +127,7 @@ const App = () => {
                         <div>{validationMessages.input2}</div>
                     </label>
                 </div>
-                <div className={areCorrect.checkbox ? "valid" : "invalid"}
+                <div className={areCorrect.checkbox !== '' ? (areCorrect.checkbox ? 'valid' : 'invalid') : ''}
                 >
                     <div>
                         <label>
@@ -147,7 +149,7 @@ const App = () => {
                                 checked={formData.checkbox2}
                                 onChange={handleCheckboxChange}
                             />
-                           
+
                         </label>
                     </div>
                     <div>
@@ -168,7 +170,7 @@ const App = () => {
                         Select (múltiple):
                         <select
                             name="select"
-                            className={areCorrect.select ? "valid" : "invalid"}
+                            className={areCorrect.select !== '' ? (areCorrect.select ? 'valid' : 'invalid') : ''}
                             multiple
                             value={formData.select}
                             onChange={handleSelectChange}
