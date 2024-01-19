@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Symbol from './symbol.js';
 
 const App = () => {
     const [formData, setFormData] = useState({
         input1: '',
         input2: '',
+        checkboxes: 0,
         checkbox1: false,
         checkbox2: false,
         checkbox3: false,
@@ -28,7 +28,7 @@ const App = () => {
         const isValid = formData.input1.trim().length >= 3 && 5 >= formData.input1.trim().length;
         setValidationMessages((prevMessages) => ({
             ...prevMessages,
-            input1: isValid ? 'Text correcte' : 'Text incorrecte',
+            input1: isValid ? 'Text correcte ✅' : 'Text incorrecte ❌',
         }));
         setAreCorrect((areCorrects) => ({
             ...areCorrects,
@@ -42,7 +42,7 @@ const App = () => {
         setFormData({ ...formData, input2: e.target.value });
         setValidationMessages((prevMessages) => ({
             ...prevMessages,
-            input2: isValid ? 'Email correcte ' : 'Format d\'email incorrecte',
+            input2: isValid ? 'Email correcte ✅' : 'Format d\'email incorrecte ❌',
         }));
         setAreCorrect((areCorrects) => ({
             ...areCorrects,
@@ -54,25 +54,31 @@ const App = () => {
     const handleCheckboxChange = (e) => {
         const isChecked = e.target.checked;
         const checkboxName = e.target.name;
+        
+
+        if (isChecked) { formData.checkboxes++ }
+        else { formData.checkboxes-- }
 
         setFormData((prevFormData) => ({
             ...prevFormData,
             [checkboxName]: isChecked,
+           checkboxes: formData.checkboxes
         }));
 
-        const selectedCheckboxes = Object.values(formData).filter((value) => value === true);
-        const isValid = selectedCheckboxes.length === 2;
+        
+        const isValid = formData.checkboxes === 2;
+        console.log(isValid)
 
         setValidationMessages((prevMessages) => ({
             ...prevMessages,
-            checkbox: isValid ? 'Ha seleccionat 2 opcions correctament' : 'Ha de seleccionar 2 opcions',
+            checkbox: isValid ? 'Ha seleccionat 2 opcions correctament ✅' : 'Ha de seleccionar 2 opcions ❌',
         }));
 
         setAreCorrect((prevAreCorrects) => ({
             ...prevAreCorrects,
             checkbox: isValid,
         }));
-        
+
     };
 
     const handleSelectChange = (e) => {
@@ -80,7 +86,7 @@ const App = () => {
         setFormData({ ...formData, select: selectedOptions });
         setValidationMessages((prevMessages) => ({
             ...prevMessages,
-            select: selectedOptions.length === 2 ? 'Ha seleccionat 2 opcions correctament' : 'Ha de seleccionar 2 opcions',
+            select: selectedOptions.length === 2 ? 'Ha seleccionat 2 opcions correctament ✅' : 'Ha de seleccionar 2 opcions ❌',
         }));
         setAreCorrect((areCorrects) => ({
             ...areCorrects,
@@ -109,7 +115,7 @@ const App = () => {
                             onChange={(e) => setFormData({ ...formData, input1: e.target.value })}
                             required
                         />
-                        <div>{validationMessages.input1}<Symbol areCorrect={areCorrect.input1}/>
+                        <div>{validationMessages.input1}
                         </div>
                     </label>
                 </div>
