@@ -6,13 +6,19 @@ import SubscriptionForm from './Components/SubscriptionForm';
 import CreatePasswordComponent from './Components/CreatePasswordComponent';
 
 function App() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    firstEmail: ""
+  });
   const [step, setStep] = useState(1);
 
   const handleSubscriptionSubmit = (data) => {
-    console.log(step)
-    setFormData(data);
+    setFormData(prevData => ({
+      ...prevData,
+      firstEmail: data.email, 
+    }));
     setStep(step + 1);
+    console.log(data.email)
+
   };
 
   return (
@@ -22,6 +28,7 @@ function App() {
       <h2>Exercici 4 Formulari de registre múltiple</h2>
       {step === 1 && <SubscriptionForm onSubmit={handleSubscriptionSubmit} />}
       {step === 2 && <CreatePasswordComponent onSubmit={handleSubscriptionSubmit}/>}
+      {/* {step === 3 && } */}
     </div>
   );
 }

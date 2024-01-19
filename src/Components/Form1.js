@@ -67,7 +67,6 @@ const App = () => {
 
         
         const isValid = formData.checkboxes === 2;
-        console.log(isValid)
 
         setValidationMessages((prevMessages) => ({
             ...prevMessages,
