@@ -1,65 +1,83 @@
 import React, { useState } from 'react';
 
-const CreatePasswordComponent = () => {
-  const [email, setEmail] = useState('');
+const CreatePasswordComponent = ({ onSubmit }) => {
+  const [email2, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   const validateEmail = () => {
-    if (!email) {
-      setEmailError('El email es obligatorio.');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError('Formato de email no válido.');
-    } else if (email.length < 5 || email.length > 50) {
-      setEmailError('El email debe tener entre 5 y 50 caracteres.');
-    } else {
-      setEmailError('');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email2)) {
+      setEmailError('Introduce un email válido.');
+      return false;
     }
+    setEmailError('');
+    return true;
   };
 
   const validatePassword = () => {
-    if (!password) {
-      setPasswordError('El password es obligatorio.');
-    } else if (password.length < 6 || password.length > 60) {
-      setPasswordError('El password debe tener entre 6 y 60 caracteres.');
-    } else {
-      setPasswordError('');
+    if (password.length < 6 || password.length > 60) {
+      setPasswordError('La contraseña debe tener entre 6 y 60 caracteres.');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
+
+  const handleBlur = (field) => {
+    if (field === 'email') {
+      validateEmail();
+    } else if (field === 'password') {
+      validatePassword();
     }
   };
 
-  const handleNextClick = () => {
-    validateEmail();
-    validatePassword();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    // Si no hay errores, puedes realizar acciones adicionales aquí.
-    if (!emailError && !passwordError) {
-      console.log('Información válida. Realizar acciones adicionales si es necesario.');
+    const isEmailValid = validateEmail();
+    const isPasswordValid = validatePassword();
+
+    if (isEmailValid && isPasswordValid) {
+      onSubmit({ email2, password });
     }
   };
 
   return (
-    <div>
-      <label>Email:</label>
-      <input
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        onBlur={validateEmail}
-      />
-      {emailError && <p>{emailError}</p>}
-
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        onBlur={validatePassword}
-      />
-      {passwordError && <p>{passwordError}</p>}
-
-      <button onClick={handleNextClick}>Siguiente</button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <label htmlFor="email" className="form-label">
+          Email
+        </label>
+        <input
+          type="email"
+          className="form-control"
+          id="email"
+          value={email2}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => handleBlur('email')}
+        />
+        {emailError && <div className="text-danger">{emailError}</div>}
+      </div>
+      <div className="mb-3">
+        <label htmlFor="password" className="form-label">
+          Contraseña
+        </label>
+        <input
+          type="password"
+          className="form-control"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onBlur={() => handleBlur('password')}
+        />
+        {passwordError && <div className="text-danger">{passwordError}</div>}
+      </div>
+      <button type="submit" className="btn btn-primary">
+        Siguiente
+      </button>
+    </form>
   );
 };
 
