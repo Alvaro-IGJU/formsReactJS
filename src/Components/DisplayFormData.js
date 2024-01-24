@@ -1,19 +1,21 @@
 import React from 'react';
 
+
 const DisplayFormData = ({ formData }) => {
-    console.log("LLEGA AQUI")
   return (
-    <div>
-      <h2>Datos del Formulario:</h2>
-      <p>Primer Email: {formData.firstEmail}</p>
-      <p>Segundo Email: {formData.secondEmail}</p>
-      <p>Password: {formData.password}</p>
-      <p>Plan Seleccionado: {formData.selectedPlan}</p>
-      <p>Nombre: {formData.firstName}</p>
-      <p>Apellido: {formData.lastName}</p>
-      <p>Número de Tarjeta: {formData.cardNumber}</p>
-      <p>Fecha de Vencimiento: {formData.expirationMonth}/{formData.expirationYear}</p>
-      <p>CVV: {formData.cvv}</p>
+    <div className="display-form-container">
+      <h2 className="display-form-heading"><b>Datos del Formulario:</b></h2>
+      <p className="display-form-paragraph"><b>Primer Email: </b>{formData.firstEmail}</p>
+      <p className="display-form-paragraph"><b>Segundo Email: </b>{formData.secondEmail}</p>
+      <p className="display-form-paragraph"><b>Password: </b>{formData.password}</p>
+      <p className="display-form-paragraph"><b>Plan Seleccionado: </b>{formData.selectedPlan}</p>
+      <p className="display-form-paragraph"><b>Nombre: </b>{formData.firstName}</p>
+      <p className="display-form-paragraph"><b>Apellido: </b>{formData.lastName}</p>
+      <p className="display-form-paragraph"><b>Número de Tarjeta: </b>{formData.cardNumber}</p>
+      <p className="display-form-paragraph">
+      <b>Fecha de Vencimiento:</b> {formData.expirationMonth}/{formData.expirationYear}
+      </p>
+      <p className="display-form-paragraph"><b>CVV: </b>{formData.cvv}</p>
     </div>
   );
 };

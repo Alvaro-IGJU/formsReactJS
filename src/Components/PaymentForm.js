@@ -7,41 +7,57 @@ const PaymentForm = ({ onSubmit }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
-    const [expirationMonth, setExpirationMonth] = useState('');
+    const [expirationMonthYear, setExpirationMonthYear] = useState('');
     const [expirationYear, setExpirationYear] = useState('');
+    const [expirationMonth, setExpirationMonth] = useState('');
     const [cvv, setCVV] = useState('');
-    const [cardPhoto, setCardPhoto] = useState('')
+    const [cardPhoto, setCardPhoto] = useState('');
     const [nameError, setNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
     const [cardNumberError, setCardNumberError] = useState('');
     const [expirationDateError, setExpirationDateError] = useState('');
     const [cvvError, setCVVError] = useState('');
 
-    const validateName = (name) => {
-        if (name.length < 3 || /\d/.test(name)) {
-            setNameError('El nombre debe tener al menos 3 caracteres y no puede contener números.');
+    const validateName = () => {
+        const nameInput = document.getElementById('firstName');
+        nameInput.setCustomValidity('');
+
+        if (!nameInput.checkValidity() || nameInput.value === "") {
+            if (nameInput.validity.patternMismatch || nameInput.value === "") {
+                nameInput.setCustomValidity('Introduce un nombre válido');
+                setNameError('Introduce un nombre con más de 3 caracteres');
+                nameInput.reportValidity();
+            }
             return false;
         }
+
         setNameError('');
         return true;
     };
 
-    const validateLastName = (lastName) => {
-        console.log(lastName.length, "IAIAAIAIA")
-        if ((lastName.length === 0 || /\d/.test(lastName))) {
-            setLastNameError('El apellido debe tener al menos 1 caracter y no puede contener números.');
+    const validateLastName = () => {
+        const lastNameInput = document.getElementById('lastName');
+        lastNameInput.setCustomValidity('');
+
+        if (!lastNameInput.checkValidity() || lastNameInput.value === "") {
+            if (lastNameInput.validity.patternMismatch || lastNameInput.value === "") {
+                lastNameInput.setCustomValidity('Introduce un apellido válido');
+                setLastNameError('Introduce como mínimo un caracter');
+                lastNameInput.reportValidity();
+            }
             return false;
         }
+
         setLastNameError('');
         return true;
     };
 
-    const validateCardNumber = (number) => {
+    const validateCardNumber = () => {
         const visaRegex = /^4[0-9]{12}(?:[0-9]{3})?$/;
         const mastercardRegex = /^5[1-5][0-9]{14}$/;
         const amexRegex = /^3[47][0-9]{13}$/;
 
-        if (!visaRegex.test(number) && !mastercardRegex.test(number) && !amexRegex.test(number)) {
+        if (!visaRegex.test(cardNumber) && !mastercardRegex.test(cardNumber) && !amexRegex.test(cardNumber)) {
             setCardNumberError('Introduce un número de tarjeta válido.');
             return false;
         }
@@ -49,61 +65,83 @@ const PaymentForm = ({ onSubmit }) => {
         setCardNumberError('');
 
         // Detectar el tipo de tarjeta
-        let cardType;
-        if (visaRegex.test(number)) {
-            setCardPhoto(visa)
-        } else if (mastercardRegex.test(number)) {
-            setCardPhoto(master)
-
-        } else if (amexRegex.test(number)) {
-            setCardPhoto(americanExpress)
-
-        }else{
-            setCardPhoto('')
+        if (visaRegex.test(cardNumber)) {
+            setCardPhoto(visa);
+        } else if (mastercardRegex.test(cardNumber)) {
+            setCardPhoto(master);
+        } else if (amexRegex.test(cardNumber)) {
+            setCardPhoto(americanExpress);
+        } else {
+            setCardPhoto('');
         }
-
 
         return true;
     };
 
-    const validateExpirationDate = (month, year) => {
-        const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1; // Meses van de 0 a 11
-      
-        if (year < currentYear || year > currentYear + 25) {
-          setExpirationDateError('El año de vencimiento debe estar entre el año actual y 25 años después.');
-          return false;
+    const validateExpirationDate = () => {
+        const expirationInput = document.getElementById('expiration');
+        expirationInput.setCustomValidity('');
+
+        let currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+
+        if (!expirationInput.checkValidity()) {
+            expirationInput.setCustomValidity('Introduce una fecha de vencimiento válida (MM/YY).');
+            setExpirationDateError('Introduce una fecha de vencimiento válida (MM/YY).');
+            expirationInput.reportValidity();
+            return false;
         }
-      
-        if (year === currentYear && month < currentMonth) {
-          setExpirationDateError('La tarjeta ha expirado.');
-          return false;
+        console.log(expirationMonthYear)
+        let auxMonthYear = expirationMonthYear;
+        let [month, year] = auxMonthYear.split('/');
+        setExpirationYear(year);
+        setExpirationMonth(month)
+        currentYear = currentYear % 100;
+        console.log(currentYear)
+        console.log(year)
+        const parsedYear = parseInt(year);
+        const parsedMonth = parseInt(month, 10);
+
+        if (parsedYear < currentYear || parsedYear > currentYear + 25) {
+            expirationInput.setCustomValidity('El año de vencimiento debe estar entre el año actual y 25 años después.');
+            setExpirationDateError('El año de vencimiento debe estar entre el año actual y 25 años después.');
+            expirationInput.reportValidity();
+            return false;
         }
-      
-        if (month < 1 || month > 12) {
-          setExpirationDateError('Introduce un mes de vencimiento válido.');
-          return false;
+
+        if (parsedYear === currentYear && parsedMonth < currentMonth) {
+            setExpirationDateError('La tarjeta ha expirado.');
+            return false;
         }
-      
-        const lastDayOfMonth = new Date(year, month, 0).getDate();
+
+        if (parsedMonth < 1 || parsedMonth > 12) {
+            setExpirationDateError('Introduce un mes de vencimiento válido.');
+            return false;
+        }
+
+        const lastDayOfMonth = new Date(parsedYear, parsedMonth, 0).getDate();
+        if (lastDayOfMonth < 1 || lastDayOfMonth > 31) {
+            setExpirationDateError('Error en el cálculo del último día del mes.');
+            return false;
+        }
+
         const currentDay = new Date().getDate();
-      
-        if (currentYear === year && currentMonth === month && currentDay > lastDayOfMonth) {
-          setExpirationDateError('La tarjeta ha expirado.');
-          return false;
+        if (parsedYear === currentYear && parsedMonth === currentMonth && currentDay > lastDayOfMonth) {
+            setExpirationDateError('La tarjeta ha expirado.');
+            return false;
         }
-      
+
         setExpirationDateError('');
         return true;
-      };
-          
+    };
 
-    const validateCVV = (cvvNumber) => {
+    const validateCVV = () => {
         const cvvRegex = /^[0-9]{3,4}$/;
-        if (!cvvRegex.test(cvvNumber)) {
+        if (!cvvRegex.test(cvv)) {
             setCVVError('El CVV debe tener 3 o 4 dígitos.');
             return false;
         }
+
         setCVVError('');
         return true;
     };
@@ -111,15 +149,12 @@ const PaymentForm = ({ onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const isNameValid = validateName(firstName);
-        const isLastNameValid = validateLastName(lastName);
-        const isCardNumberValid = validateCardNumber(cardNumber);
-        const isExpirationDateValid = validateExpirationDate(
-            parseInt(expirationMonth, 10),
-            parseInt(expirationYear, 10)
-        );
-        const isCVVValid = validateCVV(cvv);
-
+        const isNameValid = validateName();
+        const isLastNameValid = validateLastName();
+        const isCardNumberValid = validateCardNumber();
+        const isExpirationDateValid = validateExpirationDate();
+        const isCVVValid = validateCVV();
+        console.log("HIMANO",expirationMonthYear)
         if (isNameValid && isLastNameValid && isCardNumberValid && isExpirationDateValid && isCVVValid) {
             onSubmit({
                 firstName,
@@ -127,26 +162,28 @@ const PaymentForm = ({ onSubmit }) => {
                 cardNumber,
                 expirationMonth,
                 expirationYear,
+                expirationMonthYear,
                 cvv,
             });
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate id='exercici44'>
             <div className="mb-3">
                 <label htmlFor="firstName" className="form-label">
                     Nombre
                 </label>
                 <input
                     type="text"
-                    className="form-control"
+                    className="form-control netflix-form"
                     id="firstName"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    onBlur={() => validateName(firstName)}
+                    pattern='^[^\d]{3,}$'
+                    onInput={validateName}
                 />
-                {nameError && <div className="text-danger">{nameError}</div>}
+                {nameError && <div className="text-danger netflix-danger">{nameError}</div>}
             </div>
             <div className="mb-3">
                 <label htmlFor="lastName" className="form-label">
@@ -154,13 +191,14 @@ const PaymentForm = ({ onSubmit }) => {
                 </label>
                 <input
                     type="text"
-                    className="form-control"
+                    className="form-control netflix-form"
                     id="lastName"
                     value={lastName}
+                    pattern='^[^\d]*[a-zA-ZÀ-ÿ][^\d]*$'
                     onChange={(e) => setLastName(e.target.value)}
-                    onBlur={() => validateLastName(lastName)}
+                    onInput={validateLastName}
                 />
-                {lastNameError && <div className="text-danger">{lastNameError}</div>}
+                {lastNameError && <div className="text-danger netflix-danger">{lastNameError}</div>}
             </div>
             <div className="mb-3">
                 <label htmlFor="cardNumber" className="form-label">
@@ -168,43 +206,31 @@ const PaymentForm = ({ onSubmit }) => {
                 </label>
                 <input
                     type="text"
-                    className="form-control"
+                    className="form-control netflix-form"
                     id="cardNumber"
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
-                    onBlur={() => validateCardNumber(cardNumber)}
+                    onBlur={validateCardNumber}
                 />
-                {cardNumberError && <div className="text-danger">{cardNumberError}</div>}
-
-                {!cardNumberError && <img src={cardPhoto} alt='visa' height="100px" width="100px"></img>}
+                {cardNumberError && <div className="text-danger netflix-danger">{cardNumberError}</div>}
+                {!cardNumberError && <img src={cardPhoto} alt='visa' height="100px" width="200px" />}
             </div>
-            <div className="row">
-                <div className="col-md-6 mb-3">
-                    <label htmlFor="expirationMonth" className="form-label">
-                        Mes de Vencimiento
-                    </label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="expirationMonth"
-                        value={expirationMonth}
-                        onChange={(e) => setExpirationMonth(e.target.value)}
-                    />
-                </div>
-                <div className="col-md-6 mb-3">
-                    <label htmlFor="expirationYear" className="form-label">
-                        Año de Vencimiento
-                    </label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="expirationYear"
-                        value={expirationYear}
-                        onChange={(e) => setExpirationYear(e.target.value)}
-                    />
-                </div>
+            <div className="mb-3">
+                <label htmlFor="expiration" className="form-label">
+                    Fecha de Vencimiento (MM/YY)
+                </label>
+                <input
+                    type="text"
+                    className="form-control netflix-form"
+                    id="expiration"
+                    placeholder='Fecha de vencimiento (MM/AA)'
+                    value={expirationMonthYear}
+                    onChange={(e) => setExpirationMonthYear(e.target.value)}
+                    pattern="^(0[1-9]|1[0-2])\/\d{2}$"
+                    onBlur={validateExpirationDate}
+                />
                 {expirationDateError && (
-                    <div className="text-danger col-md-12 mb-3">{expirationDateError}</div>
+                    <div className="text-danger netflix-danger">{expirationDateError}</div>
                 )}
             </div>
             <div className="mb-3">
@@ -213,15 +239,15 @@ const PaymentForm = ({ onSubmit }) => {
                 </label>
                 <input
                     type="text"
-                    className="form-control"
+                    className="form-control netflix-form "
                     id="cvv"
                     value={cvv}
                     onChange={(e) => setCVV(e.target.value)}
-                    onBlur={() => validateCVV(cvv)}
+                    onBlur={validateCVV}
                 />
-                {cvvError && <div className="text-danger">{cvvError}</div>}
+                {cvvError && <div className="text-danger netflix-danger">{cvvError}</div>}
             </div>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary netflix-btn">
                 Siguiente
             </button>
         </form>

@@ -5,13 +5,18 @@ const SubscriptionForm = ({ onSubmit }) => {
   const [emailError, setEmailError] = useState('');
 
   const validateEmail = () => {
-    // Pots implementar la lògica de validació d'email aquí
-    // En aquest exemple, només comprovarem si l'email té un format vàlid
+    const emailInput = document.getElementById('email');
+    emailInput.setCustomValidity('');
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setEmailError('Introdueix un email vàlid');
+
+    if (!emailRegex.test(emailInput.value)) {
+      emailInput.setCustomValidity('Introduce un email válido');
+      setEmailError('Introduce un email válido');
+      emailInput.reportValidity();
       return false;
     }
+
     setEmailError('');
     return true;
   };
@@ -28,26 +33,26 @@ const SubscriptionForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} noValidate id='exercici41'>
       <div className="mb-3">
         <label htmlFor="email" className="form-label">
           Email
         </label>
         <input
           type="email"
-          className="form-control"
+          className="form-control netflix-form"
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          onBlur={handleBlur}
+          onInput={handleBlur}
         />
-        {emailError && <div className="text-danger">{emailError}</div>}
+        {emailError && <div className="text-danger netflix-danger">{emailError}</div>}
       </div>
-      <button type="submit" className="btn btn-primary">
-        Empezar
+      <button type="submit" className="btn btn-primary netflix-btn">
+        Empezar   
       </button>
     </form>
   );
 };
 
-export default SubscriptionForm;
+export default SubscriptionForm

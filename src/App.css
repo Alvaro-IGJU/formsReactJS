@@ -18,13 +18,132 @@
   font-size: 18px;
 }
 
-.valid{
+.valid {
   border: 2px solid rgb(107, 255, 107);
-  /* background-color: green; */
+  background-color: rgb(192, 255, 192);
 }
 
-.invalid{
+.invalid {
   border: 2px solid rgb(255, 130, 130);
   /* background-color: red; */
 
+}
+
+.netflix-form {
+  height: 35px;
+  width: 250px;
+}
+
+.netflix-form:focus {
+  border-style: none;
+  border: 2px solid gray;
+}
+
+.netflix-danger {
+  color: red;
+  width: 100%;
+}
+
+.netflix-btn {
+  background-color: red;
+  border-style: none;
+  color: white;
+  font-family: Helvetica, sans-serif;
+  padding: 10px 10px;
+}
+
+form {
+  height: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#exercici41>div>* {
+  margin: 10%;
+}
+
+#exercici41>label {
+  margin-right: 40px;
+}
+
+#exercici41>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#exercici42{
+  margin-top: 2%;
+}
+
+#exercici42>div>* {
+  margin: 6%;
+}
+
+#exercici42>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#exercici43{
+  margin-top: 2%;
+}
+
+#exercici43 label{
+  width: 100%;
+}
+
+#exercici43>div>* {
+  margin: 10%;
+}
+
+#exercici43>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#exercici44{
+  margin-top: 10%;
+}
+
+#exercici44 >div>label{
+  margin-top: 4%;
+  text-align: center;
+  width: 100%;
+}
+
+#exercici44>div>* {
+  margin: 1%;
+}
+
+#exercici44>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.display-form-container {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.display-form-heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.display-form-paragraph {
+  margin-bottom: 8px;
 }
