@@ -33,7 +33,7 @@ const SubscriptionForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate id='exercici41'>
+    <form onSubmit={handleSubmit} noValidate id='exercici41' className='display-form-container'>
       <div className="mb-3">
         <label htmlFor="email" className="form-label">
           Email

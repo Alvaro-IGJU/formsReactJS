@@ -34,7 +34,7 @@ const SelectPlanForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} id='exercici43' noValidate>
+    <form onSubmit={handleSubmit} id='exercici43' noValidate className='display-form-container'>
       <div className="mb-3">
         <label htmlFor="plan" className="form-label">
           Selecciona un plan

@@ -66,6 +66,8 @@ function App() {
       <h2>Exercici 3 Validació de formularis en React</h2>
       <Form1 />
       <h2>Exercici 4 Formulari de registre múltiple</h2>
+      <h4>Paso {step} de 5</h4>
+
       {step === 1 && <SubscriptionForm onSubmit={handleSubscriptionSubmit} />}
       {step === 2 && <CreatePasswordComponent onSubmit={handleSubscriptionSubmit}/>}
       {step === 3 && <SelectPlanForm onSubmit={handleSubscriptionSubmit}/>}

@@ -62,7 +62,7 @@ const CreatePasswordComponent = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} id="exercici42" noValidate>
+    <form onSubmit={handleSubmit} id="exercici42" noValidate className='display-form-container'>
       <div className="mb-3">
         <label htmlFor="email" className="form-label">
           Email

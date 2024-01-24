@@ -169,7 +169,7 @@ const PaymentForm = ({ onSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} noValidate id='exercici44'>
+        <form onSubmit={handleSubmit} noValidate id='exercici44' className='display-form-container'>
             <div className="mb-3">
                 <label htmlFor="firstName" className="form-label">
                     Nombre
